@@ -1,21 +1,22 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: web-app-{{ .Values.color }}   # unique deployment name per color
+  name: web-app-{{ .Values.color }}
   labels:
     app: {{ .Values.color }}-webserver
 spec:
-  replicas: {{ .Values.replicaCount }}
+  replicas: {{ index .Values .Values.color "replicaCount" }}
   selector:
     matchLabels:
       app: webserver
-      ver: {{ .Values.color }}       # match pods by color
+      ver: {{ .Values.color }}
   template:
     metadata:
       labels:
         app: webserver
-        ver: {{ .Values.color }}     # pods get color label
+        ver: {{ .Values.color }}
     spec:
       containers:
         - name: webserver-container
-          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          image: "{{ index .Values .Values.color "image" "repository" }}:{{ index .Values .Values.color "image" "tag" }}"
+
