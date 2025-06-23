@@ -1,0 +1,21 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: web-app-blue
+  namespace: argocd-app
+spec:
+  project: default
+  source:
+    repoURL: 'https://github.com/EyesOnCloud/bluegreen-helm-argocd'
+    targetRevision: HEAD
+    path: web-app
+    helm:
+      valueFiles:
+        - environments/blue/values.yaml
+  destination:
+    server: 'https://192.168.100.11:6443'
+    namespace: default
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
