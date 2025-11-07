@@ -14,7 +14,7 @@ green:
   ingress:
     enabled: false
 
-serviceSelectorColor: blue
+serviceSelectorColor: green
 service:
   type: NodePort
   nodePort: 30010
