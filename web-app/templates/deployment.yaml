@@ -40,4 +40,9 @@ spec:
             - name: {{ .name }}
               mountPath: /tmp
             {{- end }}
+      volumes:
+        {{- range $config.volumes }}
+        - name: {{ .name }}
+          emptyDir: {}
+        {{- end }}
 {{- end }}
