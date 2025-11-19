@@ -19,20 +19,15 @@ spec:
         app: webserver
         ver: {{ $color }}
     spec:
-      securityContext:
-        runAsNonRoot: true
       containers:
         - name: webserver-container
           image: "{{ $config.image.repository }}:{{ $config.image.tag }}"
           ports:
-            - containerPort: 8080
+            - containerPort: 80
               name: http
-          env:
-            - name: NGINX_PORT
-              value: "8080"
           securityContext:
-            allowPrivilegeEscalation: false
-            runAsNonRoot: true
+            runAsUser: 0
+            allowPrivilegeEscalation: true
           resources:
             requests:
               cpu: 50m
@@ -41,19 +36,8 @@ spec:
               cpu: 200m
               memory: 256Mi
           volumeMounts:
-            {{- range $config.extraVolumeMounts }}
+            {{- range $config.volumes }}
             - name: {{ .name }}
-              mountPath: {{ .mountPath }}
+              mountPath: /tmp
             {{- end }}
-            - name: run-log
-              mountPath: /var/run
-            - name: run-log
-              mountPath: /var/log/nginx
-      volumes:
-        {{- range $config.volumes }}
-        - name: {{ .name }}
-          emptyDir: {}
-        {{- end }}
-        - name: run-log
-          emptyDir: {}
 {{- end }}
