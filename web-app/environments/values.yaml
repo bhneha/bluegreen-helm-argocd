@@ -1,3 +1,5 @@
+# environments/values.yaml  ← ONLY THIS FILE CHANGES
+
 serviceSelectorColor: blue
 
 service:
@@ -11,8 +13,8 @@ blue:
     repository: eyesoncloud/web-app
     tag: v1
   securityContext:
-    runAsUser: 1000680001
-    fsGroup: 1000680001
+    runAsUser: 1000740001        # ← CHANGED
+    fsGroup: 1000740001          # ← CHANGED
   extraVolumeMounts:
     - name: nginx-temp
       mountPath: /var/cache/nginx
@@ -26,8 +28,8 @@ green:
     repository: eyesoncloud/web-app
     tag: v2
   securityContext:
-    runAsUser: 1000680001
-    fsGroup: 1000680001
+    runAsUser: 1000740001        # ← CHANGED
+    fsGroup: 1000740001          # ← CHANGED
   extraVolumeMounts:
     - name: nginx-temp
       mountPath: /var/cache/nginx
