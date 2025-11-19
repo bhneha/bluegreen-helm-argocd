@@ -3,14 +3,19 @@ kind: Service
 metadata:
   name: blue-green-service
   labels:
-    app: blue-webserver
+    app: blue-green-webserver
 spec:
-  type: NodePort
+  type: {{ .Values.service.type | default "NodePort" }}
+  {{- if eq .Values.service.type "NodePort" }}
+  nodePort: {{ .Values.service.nodePort }}
+  {{- end }}
   selector:
     app: webserver
-    ver: {{ .Values.serviceSelectorColor }}    # either "blue" or "green"
+    ver: {{ .Values.serviceSelectorColor }}
   ports:
     - protocol: TCP
-      nodePort: 30010
-      port: 80
-      targetPort: 80
+      port: {{ .Values.service.port }}
+      targetPort: 8080
+      {{- if eq .Values.service.type "NodePort" }}
+      nodePort: {{ .Values.service.nodePort }}
+      {{- end }}
