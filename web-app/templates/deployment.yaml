@@ -19,10 +19,6 @@ spec:
         app: webserver
         ver: {{ $color }}
     spec:
-      securityContext:
-        runAsNonRoot: true
-        runAsUser: {{ $config.securityContext.runAsUser | default 1000680001 }}
-        fsGroup: {{ $config.securityContext.fsGroup | default 1000680001 }}
       containers:
         - name: webserver-container
           image: "{{ $config.image.repository }}:{{ $config.image.tag }}"
