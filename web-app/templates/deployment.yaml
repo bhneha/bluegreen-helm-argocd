@@ -1,11 +1,12 @@
 {{- range $color, $config := dict "blue" .Values.blue "green" .Values.green }}
+---
 apiVersion: apps/v1
 kind: Deployment
-metadata:
 metadata:
   name: web-app-{{ $color }}
   labels:
     app: {{ $color }}-webserver
+    version: {{ $color }}
 spec:
   replicas: {{ $config.replicaCount }}
   selector:
@@ -18,14 +19,17 @@ spec:
         app: webserver
         ver: {{ $color }}
     spec:
+      securityContext:
+        runAsUser: {{ $config.securityContext.runAsUser | default 1000680001 }}
+        fsGroup: {{ $config.securityContext.fsGroup | default 1000680001 }}
+        runAsNonRoot: true
       containers:
         - name: webserver-container
           image: "{{ $config.image.repository }}:{{ $config.image.tag }}"
           ports:
             - containerPort: 8080
+              name: http
           securityContext:
-            runAsNonRoot: true
-            runAsUser: 1000680001
             allowPrivilegeEscalation: false
             capabilities:
               drop:
@@ -38,14 +42,17 @@ spec:
               cpu: 200m
               memory: 256Mi
           volumeMounts:
-            - name: tmp
-              mountPath: /var/cache/nginx
-            - name: tmp
+            # Your custom mounts from values.yaml
+            {{- toYaml ($config.extraVolumeMounts | default (dict)) | list)) | nindent 12 }}
+            # Always mount /var/run and /var/log too (critical for nginx)
+            - name: run-log
               mountPath: /var/run
-            - name: tmp
+            - name: run-log
               mountPath: /var/log/nginx
       volumes:
-        - name: tmp
+        # Your custom volumes from values.yaml
+        {{- toYaml ($config.volumes | default (dict)) | nindent 8 }}
+        # Always provide this emptyDir for run/log
+        - name: run-log
           emptyDir: {}
----
 {{- end }}
