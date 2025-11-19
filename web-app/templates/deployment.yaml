@@ -23,7 +23,7 @@ spec:
         - name: webserver-container
           image: "{{ $config.image.repository }}:{{ $config.image.tag }}"
           ports:
-            - containerPort: 80
+            - containerPort: {{ $.Values.containerPort }}
               name: http
           securityContext:
             runAsUser: 0
