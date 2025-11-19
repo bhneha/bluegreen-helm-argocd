@@ -19,12 +19,19 @@ spec:
         app: webserver
         ver: {{ $color }}
     spec:
+      securityContext:
+        runAsUser: {{ $config.securityContext.runAsUser }}
+        runAsGroup: {{ $config.securityContext.runAsGroup }}
+        fsGroup: {{ $config.securityContext.fsGroup }}
       containers:
         - name: webserver-container
           image: "{{ $config.image.repository }}:{{ $config.image.tag }}"
           ports:
             - containerPort: 8080
               name: http
+          env:
+            - name: NGINX_PORT
+              value: "8080"
           securityContext:
             allowPrivilegeEscalation: false
             capabilities:
@@ -42,7 +49,6 @@ spec:
             - name: {{ .name }}
               mountPath: {{ .mountPath }}
             {{- end }}
-            # Always mount these two critical paths
             - name: run-log
               mountPath: /var/run
             - name: run-log
