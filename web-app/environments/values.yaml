@@ -2,7 +2,8 @@ serviceSelectorColor: blue
 
 service:
   type: NodePort
-  port: 8080
+  port: 80
+  targetPort: 8080
   nodePort: 30010
 
 blue:
