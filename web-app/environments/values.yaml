@@ -1,4 +1,4 @@
-serviceSelectorColor: blue   # ← change to "green" to flip all traffic instantly
+serviceSelectorColor: blue
 
 service:
   type: NodePort
@@ -11,7 +11,7 @@ blue:
     repository: eyesoncloud/web-app
     tag: v1
   securityContext:
-    runAsUser: 1000680001      # OpenShift-safe random UID
+    runAsUser: 1000680001
     fsGroup: 1000680001
   extraVolumeMounts:
     - name: nginx-temp
